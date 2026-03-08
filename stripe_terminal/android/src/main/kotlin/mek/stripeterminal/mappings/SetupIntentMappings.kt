@@ -1,6 +1,7 @@
 package mek.stripeterminal.mappings
 
 import com.stripe.stripeterminal.external.models.AllowRedisplay
+import com.stripe.stripeterminal.external.models.CustomerCancellation
 import com.stripe.stripeterminal.external.models.SetupAttempt
 import com.stripe.stripeterminal.external.models.SetupAttemptStatus
 import com.stripe.stripeterminal.external.models.SetupIntent
@@ -9,6 +10,7 @@ import com.stripe.stripeterminal.external.models.SetupIntentPaymentMethodDetails
 import com.stripe.stripeterminal.external.models.SetupIntentStatus
 import com.stripe.stripeterminal.external.models.SetupIntentUsage
 import mek.stripeterminal.api.AllowRedisplayApi
+import mek.stripeterminal.api.CustomerCancellationApi
 import mek.stripeterminal.api.SetupAttemptApi
 import mek.stripeterminal.api.SetupAttemptCardPresentDetailsApi
 import mek.stripeterminal.api.SetupAttemptPaymentMethodDetailsApi
@@ -92,6 +94,14 @@ fun AllowRedisplayApi.toHost(): AllowRedisplay {
         AllowRedisplayApi.ALWAYS -> AllowRedisplay.ALWAYS
         AllowRedisplayApi.LIMITED -> AllowRedisplay.LIMITED
         AllowRedisplayApi.UNSPECIFIED -> AllowRedisplay.UNSPECIFIED
+    }
+}
+
+
+fun CustomerCancellationApi.toHost(): CustomerCancellation {
+    return when (this) {
+        CustomerCancellationApi.ENABLE -> CustomerCancellation.ENABLE_IF_AVAILABLE
+        CustomerCancellationApi.DISABLE -> CustomerCancellation.DISABLE_IF_AVAILABLE
     }
 }
 

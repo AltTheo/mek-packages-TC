@@ -24,8 +24,8 @@ fun ConnectionConfigurationApi.toHost(readerDelegate: ReaderDelegatePlugin): Con
 //            shouldActivateWithExpandedLocation = shouldActivateWithExpandedLocation,
 //            shouldGenerateOfflineSessionToken = shouldGenerateOfflineSessionToken,
 //        )
-        is HandoffConnectionConfigurationApi -> ConnectionConfiguration.HandoffConnectionConfiguration(
-            handoffReaderListener = readerDelegate,
+        is HandoffConnectionConfigurationApi -> ConnectionConfiguration.AppsOnDevicesConnectionConfiguration(
+            appsOnDevicesListener = readerDelegate,
         )
         is InternetConnectionConfigurationApi -> ConnectionConfiguration.InternetConnectionConfiguration(
             failIfInUse = failIfInUse,

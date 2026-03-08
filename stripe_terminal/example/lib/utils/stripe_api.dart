@@ -6,7 +6,7 @@ import 'package:example/models/k.dart';
 import 'package:stripe/stripe.dart';
 
 class StripeApi {
-  static const String secretKey = String.fromEnvironment('STRIPE_SECRET_KEY');
+  static const String secretKey = 'sk_test_51OMuTSDcOcxV2BR5dhoXwaxi9eWXNFI4wKkCH2P0DgAggVE5PEppK557lEVK32DKVVekEgtpzfXO3BsaIVgvwzh900mG1xeYTJ';
   static StripeApi instance = StripeApi._();
 
   final _stripe = Stripe(secretKey);
