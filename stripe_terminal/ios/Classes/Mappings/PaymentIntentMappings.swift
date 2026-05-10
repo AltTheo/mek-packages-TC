@@ -55,6 +55,8 @@ extension PaymentIntentStatus {
             return .succeeded
         case .requiresAction:
             return .requiresAction
+        case .requiresReauthorization:
+            return .requiresReauthorization
         @unknown default:
             fatalError("Not supported payment intent status: \(self)")
         }
@@ -74,7 +76,7 @@ extension CaptureMethod {
     }
 }
 
-extension SCPAmountDetails {
+extension AmountDetails {
     func toApi() -> AmountDetailsApi {
         return AmountDetailsApi(
             tip: tip?.toApi()

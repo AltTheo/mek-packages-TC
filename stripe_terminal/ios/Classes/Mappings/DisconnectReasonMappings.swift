@@ -24,8 +24,10 @@ extension DisconnectReason {
             return .usbDisconnected
         case .bluetoothSignalLost:
             return .bluetoothSignalLost
+        case .peerRemovedPairingInformation:
+            return .bluetoothPeerRemovedPairingInformation
         @unknown default:
-            fatalError("WTF")
+            fatalError("DisconnectReason \(self) not supported.")
         }
     }
 }

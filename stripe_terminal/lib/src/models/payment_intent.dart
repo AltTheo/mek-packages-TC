@@ -186,6 +186,9 @@ enum PaymentIntentStatus {
 
   /// The [PaymentIntent] succeeded.
   succeeded,
+
+  /// The [PaymentIntent] requires reauthorization.
+  requiresReauthorization,
 }
 
 /// Contains details about items included in the [PaymentIntent] amount

@@ -170,3 +170,9 @@ enum AllowRedisplay {
   /// This is the default value for payment methods where allow_redisplay wasn’t set.
   unspecified
 }
+
+enum CustomerCancellation{
+  enabled,
+
+  disabled 
+}

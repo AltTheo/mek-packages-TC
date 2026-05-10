@@ -134,5 +134,6 @@ private fun TerminalErrorCode.toApiCode(): TerminalExceptionCodeApi? {
         TerminalErrorCode.BARCODE_SCANNER_UNAVAILABLE -> TerminalExceptionCodeApi.BARCODE_SCANNER_UNAVAILABLE
         TerminalErrorCode.BARCODE_REQUESTED_SCANNER_NOT_FOUND -> TerminalExceptionCodeApi.BARCODE_REQUESTED_SCANNER_NOT_FOUND
         TerminalErrorCode.BARCODE_SCANNING_UNSUPPORTED_DEVICE -> TerminalExceptionCodeApi.BARCODE_SCANNING_UNSUPPORTED_DEVICE
+        TerminalErrorCode.SIMULATED_OFFLINE_MODE_NOT_AVAILABLE_IN_LIVEMODE -> null
     }
 }

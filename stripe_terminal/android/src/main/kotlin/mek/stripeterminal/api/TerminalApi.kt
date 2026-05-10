@@ -312,7 +312,7 @@ interface TerminalPlatformApi {
                 }
                 "startCollectPaymentMethod" -> {
                     val res = Result<PaymentIntentApi>(result) { it.serialize() }
-                    onStartCollectPaymentMethod(res, (args[0] as Number).toLong(), args[1] as String, args[2] as Boolean, args[3] as String?, args[4] as Boolean, (args[5] as List<Any?>?)?.let { TippingConfigurationApi.deserialize(it) }, args[6] as Boolean, (args[7] as Int).let { CustomerCancellationApi.values()[it] }, (args[8] as Int).let { AllowRedisplayApi.values()[it] })
+                    onStartCollectPaymentMethod(res, (args[0] as Number).toLong(), args[1] as String, args[2] as Boolean, args[3] as String?, args[4] as Boolean, (args[5] as List<Any?>?)?.let { TippingConfigurationApi.deserialize(it) }, args[6] as Boolean, if (args[7] as Boolean) CustomerCancellationApi.ENABLE else CustomerCancellationApi.DISABLE, (args[8] as Int).let { AllowRedisplayApi.values()[it] })
                 }
                 "stopCollectPaymentMethod" -> {
                     val res = Result<Unit>(result) { null }
@@ -340,7 +340,7 @@ interface TerminalPlatformApi {
                 }
                 "startCollectSetupIntentPaymentMethod" -> {
                     val res = Result<SetupIntentApi>(result) { it.serialize() }
-                    onStartCollectSetupIntentPaymentMethod(res, (args[0] as Number).toLong(), args[1] as String, (args[2] as Int).let { AllowRedisplayApi.values()[it] }, (args[3] as Int). let { CustomerCancellationApi.values()[it] })
+                    onStartCollectSetupIntentPaymentMethod(res, (args[0] as Number).toLong(), args[1] as String, (args[2] as Int).let { AllowRedisplayApi.values()[it] }, if (args[3] as Boolean) CustomerCancellationApi.ENABLE else CustomerCancellationApi.DISABLE)
                 }
                 "stopCollectSetupIntentPaymentMethod" -> {
                     val res = Result<Unit>(result) { null }
@@ -360,7 +360,7 @@ interface TerminalPlatformApi {
                 }
                 "startCollectRefundPaymentMethod" -> {
                     val res = Result<Unit>(result) { null }
-                    onStartCollectRefundPaymentMethod(res, (args[0] as Number).toLong(), args[1] as String, (args[2] as Number).toLong(), args[3] as String, args[4]?.let { hashMapOf(*(it as HashMap<*, *>).map { (k, v) -> k as String to v as String }.toTypedArray()) }, args[5] as Boolean?, args[6] as Boolean?, (args[7] as Int). let { CustomerCancellationApi.values()[it] })
+                    onStartCollectRefundPaymentMethod(res, (args[0] as Number).toLong(), args[1] as String, (args[2] as Number).toLong(), args[3] as String, args[4]?.let { hashMapOf(*(it as HashMap<*, *>).map { (k, v) -> k as String to v as String }.toTypedArray()) }, args[5] as Boolean?, args[6] as Boolean?, if (args[7] as Boolean) CustomerCancellationApi.ENABLE else CustomerCancellationApi.DISABLE)
                 }
                 "stopCollectRefundPaymentMethod" -> {
                     val res = Result<Unit>(result) { null }
@@ -880,11 +880,11 @@ enum class ConnectionStatusApi {
 }
 
 enum class DeviceTypeApi {
-    CHIPPER1_X, CHIPPER2_X, STRIPE_M2, TAP_TO_PAY, WISE_CUBE, WISE_PAD3, WISE_PAD3S, WISE_POS_E, WISE_POS_E_DEVKIT, ETNA, STRIPE_S700, STRIPE_S700_DEVKIT, STRIPE_S710, STRIPE_S710_DEVKIT, VERIFONE_V660P, VERIFONE_M425, VERIFONE_M450, VERIFONE_P630, VERIFONE_UX700, VERIFONE_V660P_DEVKIT, STRIPE_T600, STRIPE_T600_DEVKIT, STRIPE_T610, STRIPE_T610_DEVKIT, VERIFONE_V660PA, VERIFONE_VM100,VERIFONE_VP100, VERIFONE_VM110, VERIFONE_VP110,VERIFONE_VL110,VERIFONE_UX700_DEVKIT;
+    CHIPPER1_X, CHIPPER2_X, STRIPE_M2, TAP_TO_PAY, VERIFONE_P400, WISE_CUBE, WISE_PAD3, WISE_PAD3S, WISE_POS_E, WISE_POS_E_DEVKIT, ETNA, STRIPE_S700, STRIPE_S700_DEVKIT, STRIPE_S710, STRIPE_S710_DEVKIT, VERIFONE_V660P, VERIFONE_M425, VERIFONE_M450, VERIFONE_P630, VERIFONE_UX700, VERIFONE_V660P_DEVKIT, VERIFONE_UX700_DEVKIT, STRIPE_T600, STRIPE_T600_DEVKIT, STRIPE_T610, STRIPE_T610_DEVKIT, VERIFONE_V660PA, VERIFONE_VM100, VERIFONE_VP100, VERIFONE_VM110, VERIFONE_VP110, VERIFONE_VL110, STRIPE_U200;
 }
 
 enum class DisconnectReasonApi {
-    UNKNOWN, DISCONNECT_REQUESTED, REBOOT_REQUESTED, SECURITY_REBOOT, CRITICALLY_LOW_BATTERY, POWERED_OFF, BLUETOOTH_DISABLED, USB_DISCONNECTED, IDLE_POWER_DOWN, BLUETOOTH_PEER_REMOVED_PAIRING_INFORMATION,BLUETOOTH_SIGNAL_LOST;
+    UNKNOWN, DISCONNECT_REQUESTED, REBOOT_REQUESTED, SECURITY_REBOOT, CRITICALLY_LOW_BATTERY, POWERED_OFF, BLUETOOTH_DISABLED, USB_DISCONNECTED, IDLE_POWER_DOWN, BLUETOOTH_SIGNAL_LOST, BLUETOOTH_PEER_REMOVED_PAIRING_INFORMATION;
 }
 
 sealed class DiscoveryConfigurationApi {
@@ -1137,7 +1137,7 @@ data class PaymentIntentParametersApi(
 }
 
 enum class PaymentIntentStatusApi {
-    CANCELED, PROCESSING, REQUIRES_CAPTURE, REQUIRES_CONFIRMATION, REQUIRES_PAYMENT_METHOD, REQUIRES_ACTION, SUCCEEDED;
+    CANCELED, PROCESSING, REQUIRES_CAPTURE, REQUIRES_CONFIRMATION, REQUIRES_PAYMENT_METHOD, REQUIRES_ACTION, SUCCEEDED, REQUIRES_REAUTHORIZATION;
 }
 
 enum class PaymentIntentUsageApi {

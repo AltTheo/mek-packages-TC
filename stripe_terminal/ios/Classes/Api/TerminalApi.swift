@@ -911,6 +911,7 @@ enum ConnectionStatusApi: Int {
     case connected
     case connecting
     case discovering
+    case reconnecting
 }
 
 enum DeviceTypeApi: Int {
@@ -936,6 +937,17 @@ enum DeviceTypeApi: Int {
     case verifoneUx700
     case verifoneV660pDevkit
     case verifoneUx700Devkit
+    case stripeT600
+    case stripeT600Devkit
+    case stripeT610
+    case stripeT610Devkit
+    case verifoneV660pa
+    case verifoneVm100
+    case verifoneVp100
+    case verifoneVm110
+    case verifoneVp110
+    case verifoneVl110
+    case stripeU200
 }
 
 enum DisconnectReasonApi: Int {
@@ -949,6 +961,7 @@ enum DisconnectReasonApi: Int {
     case usbDisconnected
     case idlePowerDown
     case bluetoothSignalLost
+    case bluetoothPeerRemovedPairingInformation
 }
 
 protocol DiscoveryConfigurationApi {}
@@ -1203,6 +1216,7 @@ enum PaymentIntentStatusApi: Int {
     case requiresPaymentMethod
     case requiresAction
     case succeeded
+    case requiresReauthorization
 }
 
 enum PaymentIntentUsageApi: Int {

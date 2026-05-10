@@ -89,8 +89,6 @@ extension DeviceType {
             return .stripeM2
         case .tapToPay:
             return .tapToPay
-        case .verifoneP400:
-            return .verifoneP400
         case .wisePad3:
             return .wisePad3
         case .wisePosE:
@@ -114,11 +112,31 @@ extension DeviceType {
         case .verifoneP630:
             return .verifoneP630
         case .verifoneV660pDevKit:
-            return .verifoneV660p
+            return .verifoneV660pDevkit
         case .verifoneUX700:
             return .verifoneUx700
         case .verifoneUX700DevKit:
             return .verifoneUx700Devkit
+        case .stripeT600:
+            return .stripeT600
+        case .stripeT600DevKit:
+            return .stripeT600Devkit
+        case .stripeT610:
+            return .stripeT610
+        case .stripeT610DevKit:
+            return .stripeT610Devkit
+        case .verifoneVM100:
+            return .verifoneVm100
+        case .verifoneVP100:
+            return .verifoneVp100
+        case .verifoneVM110:
+            return .verifoneVm110
+        case .verifoneVP110:
+            return .verifoneVp110
+        case .verifoneVL110:
+            return .verifoneVl110
+        case .stripeU200:
+            return .stripeU200
         @unknown default:
             fatalError("DeviceType \(self) not supported.")
         }
@@ -311,7 +329,7 @@ extension DeviceTypeApi {
         case .chipper2X:
             return .chipper2X
         case .verifoneP400:
-            return .verifoneP400
+            return nil
         case .wisePad3:
             return .wisePad3
         case .stripeM2:
@@ -348,6 +366,28 @@ extension DeviceTypeApi {
             return .verifoneV660pDevKit
         case .verifoneUx700Devkit:
             return .verifoneUX700DevKit
+        case .stripeT600:
+            return .stripeT600
+        case .stripeT600Devkit:
+            return .stripeT600DevKit
+        case .stripeT610:
+            return .stripeT610
+        case .stripeT610Devkit:
+            return .stripeT610DevKit
+        case .verifoneV660pa:
+            return nil
+        case .verifoneVm100:
+            return .verifoneVM100
+        case .verifoneVp100:
+            return .verifoneVP100
+        case .verifoneVm110:
+            return .verifoneVM110
+        case .verifoneVp110:
+            return .verifoneVP110
+        case .verifoneVl110:
+            return .verifoneVL110
+        case .stripeU200:
+            return .stripeU200
         @unknown default:
             fatalError("DeviceType \(self) not supported.")
         }
@@ -387,8 +427,10 @@ extension ConnectionStatus {
             return .connecting
         case .connected:
             return .connected
+        case .reconnecting:
+            return .reconnecting
         @unknown default:
-            fatalError("WTF")
+            fatalError("ConnectionStatus \(self) not supported.")
         }
     }
 }

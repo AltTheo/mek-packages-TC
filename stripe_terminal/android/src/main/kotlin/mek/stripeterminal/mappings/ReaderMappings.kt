@@ -98,6 +98,7 @@ fun DeviceType.toApi(): DeviceTypeApi? {
         DeviceType.VERIFONE_VM110 -> DeviceTypeApi.VERIFONE_VM110
         DeviceType.VERIFONE_VP110 -> DeviceTypeApi.VERIFONE_VP110
         DeviceType.VERIFONE_VL110 -> DeviceTypeApi.VERIFONE_VL110
+        DeviceType.STRIPE_U200 -> DeviceTypeApi.STRIPE_U200
         DeviceType.UNKNOWN -> null
     }
 }
@@ -242,10 +243,11 @@ fun DeviceTypeApi.toHost(): DeviceType? {
         DeviceTypeApi.CHIPPER2_X -> DeviceType.CHIPPER_2X
         DeviceTypeApi.STRIPE_M2 -> DeviceType.STRIPE_M2
         DeviceTypeApi.TAP_TO_PAY -> DeviceType.TAP_TO_PAY_DEVICE
+        DeviceTypeApi.VERIFONE_P400 -> null
         DeviceTypeApi.WISE_CUBE -> DeviceType.WISECUBE
         DeviceTypeApi.WISE_PAD3 -> DeviceType.WISEPAD_3
-        DeviceTypeApi.WISE_POS_E -> DeviceType.WISEPOS_E
         DeviceTypeApi.WISE_PAD3S -> DeviceType.WISEPAD_3S
+        DeviceTypeApi.WISE_POS_E -> DeviceType.WISEPOS_E
         DeviceTypeApi.WISE_POS_E_DEVKIT -> DeviceType.WISEPOS_E_DEVKIT
         DeviceTypeApi.ETNA -> DeviceType.ETNA
         DeviceTypeApi.STRIPE_S700 -> DeviceType.STRIPE_S700
@@ -264,11 +266,12 @@ fun DeviceTypeApi.toHost(): DeviceType? {
         DeviceTypeApi.STRIPE_T610 -> DeviceType.STRIPE_T610
         DeviceTypeApi.STRIPE_T610_DEVKIT -> DeviceType.STRIPE_T610_DEVKIT
         DeviceTypeApi.VERIFONE_V660PA -> DeviceType.VERIFONE_V660PA
-        DeviceTypeApi.VERIFONE_VM100 ->  DeviceType.VERIFONE_VM100
-        DeviceTypeApi.VERIFONE_VP100 ->  DeviceType.VERIFONE_VP100
-        DeviceTypeApi.VERIFONE_VM110 ->  DeviceType.VERIFONE_VM110
-        DeviceTypeApi.VERIFONE_VP110 ->  DeviceType.VERIFONE_VP110
-        DeviceTypeApi.VERIFONE_VL110 ->  DeviceType.VERIFONE_VL110
+        DeviceTypeApi.VERIFONE_VM100 -> DeviceType.VERIFONE_VM100
+        DeviceTypeApi.VERIFONE_VP100 -> DeviceType.VERIFONE_VP100
+        DeviceTypeApi.VERIFONE_VM110 -> DeviceType.VERIFONE_VM110
+        DeviceTypeApi.VERIFONE_VP110 -> DeviceType.VERIFONE_VP110
+        DeviceTypeApi.VERIFONE_VL110 -> DeviceType.VERIFONE_VL110
+        DeviceTypeApi.STRIPE_U200 -> DeviceType.STRIPE_U200
     }
 }
 
