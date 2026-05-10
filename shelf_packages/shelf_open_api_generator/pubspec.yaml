@@ -3,7 +3,7 @@ description: Open api specs generators from dart code for shelf package.
 repository: https://github.com/BreX900/mek-packages
 issue_tracker: https://github.com/BreX900/mek-packages/issues
 homepage: https://github.com/BreX900/mek-packages/tree/main/shelf_packages/shelf_open_api_generator
-version: 3.2.2
+version: 3.2.3
 
 environment:
   sdk: ^3.8.0
@@ -25,9 +25,9 @@ dependencies:
 
   collection: ^1.19.1
 
-  analyzer: '>=9.0.0 <11.0.0'
-  build: ^4.0.3
-  source_gen: ^4.1.1
+  analyzer: '>=10.0.0 <13.0.0'
+  build: ^4.0.4
+  source_gen: ^4.1.2
 
   # OPEN API
   json_annotation: ^4.8.0
