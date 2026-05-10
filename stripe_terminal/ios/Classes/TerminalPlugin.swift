@@ -448,6 +448,21 @@ public class TerminalPlugin: NSObject, FlutterPlugin, TerminalPlatformApi {
     func onSetTapToPayUXConfiguration(_ configuration: TapToPayUxConfigurationApi) throws {
         throw PlatformError("mek_stripe_terminal", "setTapToPayUXConfiguration method not supported on ios device");
     }
+
+    func onIsTapToPayAccountLinked(_ onBehalfOf: String?) async throws -> Bool {
+        guard #available(iOS 16.4, *) else {
+            throw PlatformError("mek_stripe_terminal", "isTapToPayAccountLinked requires iOS 16.4 or later")
+        }
+        return try await withCheckedThrowingContinuation { continuation in
+            Terminal.shared.isTapToPayAccountLinked(onBehalfOf) { isLinked, error in
+                if let error = error as? NSError {
+                    continuation.resume(throwing: error.toPlatformError())
+                } else {
+                    continuation.resume(returning: isLinked?.boolValue ?? false)
+                }
+            }
+        }
+    }
     
 // MARK: - PRIVATE METHODS
     

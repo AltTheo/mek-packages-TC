@@ -53,6 +53,7 @@ import mek.stripeterminal.api.TapToPayUxConfigurationApi
 import mek.stripeterminal.api.TerminalExceptionCodeApi
 import mek.stripeterminal.api.TerminalHandlersApi
 import mek.stripeterminal.api.TerminalPlatformApi
+import mek.stripeterminal.api.PlatformError
 import mek.stripeterminal.api.TippingConfigurationApi
 import mek.stripeterminal.mappings.toApi
 import mek.stripeterminal.mappings.toHost
@@ -601,6 +602,10 @@ class TerminalPlatformPlugin(
 
     override fun onSetTapToPayUXConfiguration(configuration: TapToPayUxConfigurationApi) {
         terminal.setTapToPayUxConfiguration(configuration.toHost());
+    }
+
+    override fun onIsTapToPayAccountLinked(result: Result<Boolean>, onBehalfOf: String?) {
+        result.error(PlatformError("mek_stripe_terminal", "isTapToPayAccountLinked is only available on iOS"))
     }
     // endregion
 

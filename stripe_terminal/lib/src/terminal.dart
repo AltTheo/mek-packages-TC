@@ -526,6 +526,15 @@ class Terminal {
   /// Configure Tap to Pay UX
   Future<void> setTapToPayUXConfiguration(TapToPayUxConfiguration configuration) async =>
       await _platform.setTapToPayUXConfiguration(configuration);
+
+  /// Returns whether Tap to Pay is activated and linked to an account on this device.
+  ///
+  /// This is an iOS-only feature (requires iOS 16.4+). On Android this throws [UnsupportedError].
+  ///
+  /// [onBehalfOf] is an optional connected account ID for Stripe Connect platforms.
+  /// Pass null to check the account that owns the API key.
+  Future<bool> isTapToPayAccountLinked({String? onBehalfOf}) async =>
+      await _platform.isTapToPayAccountLinked(onBehalfOf: onBehalfOf);
 //endregion
 
   StreamController<T> _handleStream<T>(

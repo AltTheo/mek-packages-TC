@@ -233,6 +233,11 @@ interface TerminalPlatformApi {
         configuration: TapToPayUxConfigurationApi,
     )
 
+    fun onIsTapToPayAccountLinked(
+        result: Result<Boolean>,
+        onBehalfOf: String?,
+    )
+
     private fun onMethodCall(
         call: MethodCall,
         result: MethodChannel.Result,
@@ -385,6 +390,10 @@ interface TerminalPlatformApi {
                 "setTapToPayUXConfiguration" -> {
                     onSetTapToPayUXConfiguration((args[0] as List<Any?>).let { TapToPayUxConfigurationApi.deserialize(it) })
                     result.success(null)
+                }
+                "isTapToPayAccountLinked" -> {
+                    val res = Result<Boolean>(result) { it }
+                    onIsTapToPayAccountLinked(res, args[0] as String?)
                 }
             }
         } catch (e: PlatformError) {

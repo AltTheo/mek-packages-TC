@@ -244,6 +244,10 @@ protocol TerminalPlatformApi {
     func onSetTapToPayUXConfiguration(
         _ configuration: TapToPayUxConfigurationApi
     ) throws -> Void
+
+    func onIsTapToPayAccountLinked(
+        _ onBehalfOf: String?
+    ) async throws -> Bool
 }
 
 class DiscoverReadersControllerApi {
@@ -444,6 +448,11 @@ func setTerminalPlatformApiHandler(
             case "setTapToPayUXConfiguration":
                 let res = try hostApi.onSetTapToPayUXConfiguration(TapToPayUxConfigurationApi.deserialize(args[0] as! [Any?]))
                 result(nil)
+            case "isTapToPayAccountLinked":
+                runAsync {
+                    let res = try await hostApi.onIsTapToPayAccountLinked(args[0] as? String)
+                    return res
+                }
             default:
                 result(FlutterMethodNotImplemented)
             }
