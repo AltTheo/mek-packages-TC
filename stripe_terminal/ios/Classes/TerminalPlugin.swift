@@ -453,14 +453,11 @@ public class TerminalPlugin: NSObject, FlutterPlugin, TerminalPlatformApi {
         guard #available(iOS 16.4, *) else {
             throw PlatformError("mek_stripe_terminal", "isTapToPayAccountLinked requires iOS 16.4 or later")
         }
-        return try await withCheckedThrowingContinuation { continuation in
-            Terminal.shared.isTapToPayAccountLinked(onBehalfOf) { isLinked, error in
-                if let error = error as? NSError {
-                    continuation.resume(throwing: error.toPlatformError())
-                } else {
-                    continuation.resume(returning: isLinked?.boolValue ?? false)
-                }
-            }
+        do {
+            let result = try await Terminal.shared.isTapToPayAccountLinked(onBehalfOf)
+            return result.boolValue
+        } catch let error as NSError {
+            throw error.toPlatformError()
         }
     }
     
