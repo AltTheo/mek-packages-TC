@@ -36,3 +36,7 @@ Icon?
 /Flutter/Generated.xcconfig
 /Flutter/ephemeral/
 /Flutter/flutter_export_environment.sh
+
+# Swift Package Manager artifacts
+/mek_stripe_terminal/.build/
+/mek_stripe_terminal/Package.resolved

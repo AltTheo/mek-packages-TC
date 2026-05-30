@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'BreX900' => 'email@example.com' }
   s.source           = { :path => '.' }
-  s.source_files = 'Classes/**/*'
+  s.source_files = 'mek_stripe_terminal/Sources/mek_stripe_terminal/**/*'
   s.dependency 'Flutter'
   s.platform = :ios, '15.0'
 
