@@ -79,6 +79,7 @@ extension CaptureMethod {
 extension AmountDetails {
     func toApi() -> AmountDetailsApi {
         return AmountDetailsApi(
+            surcharge: surcharge?.toApi(),
             tip: tip?.toApi()
         )
     }

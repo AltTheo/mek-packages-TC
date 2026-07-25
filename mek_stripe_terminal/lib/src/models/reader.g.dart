@@ -8,6 +8,7 @@ part of 'reader.dart';
 
 mixin _$Reader {
   Reader get _self => this as Reader;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -25,6 +26,7 @@ mixin _$Reader {
           _self.ipAddress == other.ipAddress &&
           _self.networkStatus == other.networkStatus &&
           _self.label == other.label;
+
   @override
   int get hashCode {
     var hashCode = 0;

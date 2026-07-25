@@ -8,6 +8,7 @@ part of 'location.dart';
 
 mixin _$Location {
   Location get _self => this as Location;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -18,6 +19,7 @@ mixin _$Location {
           _self.id == other.id &&
           _self.livemode == other.livemode &&
           $mapEquality.equals(_self.metadata, other.metadata);
+
   @override
   int get hashCode {
     var hashCode = 0;
@@ -41,6 +43,7 @@ mixin _$Location {
 
 mixin _$Address {
   Address get _self => this as Address;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -52,6 +55,7 @@ mixin _$Address {
           _self.line2 == other.line2 &&
           _self.postalCode == other.postalCode &&
           _self.state == other.state;
+
   @override
   int get hashCode {
     var hashCode = 0;

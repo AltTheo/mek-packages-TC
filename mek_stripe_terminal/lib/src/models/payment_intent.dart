@@ -2,6 +2,7 @@ import 'package:mek_data_class/mek_data_class.dart';
 import 'package:mek_stripe_terminal/src/models/card.dart';
 import 'package:mek_stripe_terminal/src/models/charge.dart';
 import 'package:mek_stripe_terminal/src/models/payment_method.dart';
+import 'package:mek_stripe_terminal/src/models/surcharge.dart';
 import 'package:mek_stripe_terminal/src/models/tip.dart';
 import 'package:meta/meta.dart';
 
@@ -196,9 +197,15 @@ class AmountDetails {
   /// Details about the tip
   final Tip? tip;
 
+  /// Details about the surcharge.
+  ///
+  /// This is a preview feature. To request access, contact Stripe Support.
+  final SurchargeDetails? surcharge;
+
   @internal
   const AmountDetails({
     required this.tip,
+    required this.surcharge,
   });
 }
 

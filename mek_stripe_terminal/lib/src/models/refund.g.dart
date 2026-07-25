@@ -8,6 +8,7 @@ part of 'refund.dart';
 
 mixin _$Refund {
   Refund get _self => this as Refund;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -23,6 +24,7 @@ mixin _$Refund {
           _self.status == other.status &&
           _self.paymentMethodDetails == other.paymentMethodDetails &&
           _self.failureReason == other.failureReason;
+
   @override
   int get hashCode {
     var hashCode = 0;
@@ -56,6 +58,7 @@ mixin _$Refund {
 
 mixin _$PaymentMethodDetails {
   PaymentMethodDetails get _self => this as PaymentMethodDetails;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -63,6 +66,7 @@ mixin _$PaymentMethodDetails {
           runtimeType == other.runtimeType &&
           _self.cardPresent == other.cardPresent &&
           _self.interacPresent == other.interacPresent;
+
   @override
   int get hashCode {
     var hashCode = 0;

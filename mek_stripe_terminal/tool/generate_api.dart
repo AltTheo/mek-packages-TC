@@ -17,7 +17,7 @@ void main() async {
       outputFile: 'android/src/main/kotlin/mek/stripeterminal/api/TerminalApi.kt',
     ),
     swiftOptions: const SwiftOptions(
-      outputFile: 'ios/Classes/Api/TerminalApi.swift',
+      outputFile: 'ios/mek_stripe_terminal/Sources/mek_stripe_terminal/Api/TerminalApi.swift',
     ),
   ).build();
 }

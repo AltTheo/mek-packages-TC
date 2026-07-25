@@ -12,7 +12,9 @@ import 'package:mek_stripe_terminal/src/models/payment_intent.dart';
 import 'package:mek_stripe_terminal/src/models/reader.dart';
 import 'package:mek_stripe_terminal/src/models/refund.dart';
 import 'package:mek_stripe_terminal/src/models/setup_intent.dart';
+import 'package:mek_stripe_terminal/src/models/simulated_offline_mode.dart';
 import 'package:mek_stripe_terminal/src/models/simultator_configuration.dart';
+import 'package:mek_stripe_terminal/src/models/surcharge.dart';
 import 'package:mek_stripe_terminal/src/models/tap_to_pay_ux_configuration.dart';
 import 'package:mek_stripe_terminal/src/models/tip.dart';
 import 'package:mek_stripe_terminal/src/platform/terminal_platform.dart';
@@ -223,6 +225,15 @@ class Terminal {
   /// with a simulated reader.
   Future<void> setSimulatorConfiguration(SimulatorConfiguration configuration) async =>
       await _platform.setSimulatorConfiguration(configuration);
+
+  /// Configures simulated offline mode, for testing offline payment flows without a physical
+  /// network disruption.
+  ///
+  /// This is a preview feature. To request access, contact Stripe Support.
+  Future<void> setSimulatedOfflineModeConfiguration(
+    SimulatedOfflineModeConfiguration configuration,
+  ) async =>
+      await _platform.setSimulatedOfflineModeConfiguration(configuration);
 //endregion
 
 //region Taking payments
@@ -317,9 +328,19 @@ class Terminal {
   /// If the updated [PaymentIntent]’s status changes to [PaymentIntentStatus.requiresPaymentMethod]
   ///   (e.g., the request failed because the card was declined), call [collectPaymentMethod]
   ///   with the updated [PaymentIntent] to try charging another card.
-  CancelableFuture<PaymentIntent> confirmPaymentIntent(PaymentIntent paymentIntent) {
+  ///
+  /// - [surcharge] Configuration for surcharge collection during payment confirmation. This is a
+  ///   preview feature. To request access, contact Stripe Support.
+  CancelableFuture<PaymentIntent> confirmPaymentIntent(
+    PaymentIntent paymentIntent, {
+    SurchargeConfiguration? surcharge,
+  }) {
     return CancelableFuture(_platform.stopConfirmPaymentIntent, (id) async {
-      return await _platform.startConfirmPaymentIntent(id, paymentIntent.id);
+      return await _platform.startConfirmPaymentIntent(
+        operationId: id,
+        paymentIntentId: paymentIntent.id,
+        surcharge: surcharge,
+      );
     });
   }
 

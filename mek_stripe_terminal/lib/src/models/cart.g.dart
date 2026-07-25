@@ -8,6 +8,7 @@ part of 'cart.dart';
 
 mixin _$Cart {
   Cart get _self => this as Cart;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -17,6 +18,7 @@ mixin _$Cart {
           _self.tax == other.tax &&
           _self.total == other.total &&
           $listEquality.equals(_self.lineItems, other.lineItems);
+
   @override
   int get hashCode {
     var hashCode = 0;
@@ -38,6 +40,7 @@ mixin _$Cart {
 
 mixin _$CartLineItem {
   CartLineItem get _self => this as CartLineItem;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -46,6 +49,7 @@ mixin _$CartLineItem {
           _self.description == other.description &&
           _self.quantity == other.quantity &&
           _self.amount == other.amount;
+
   @override
   int get hashCode {
     var hashCode = 0;

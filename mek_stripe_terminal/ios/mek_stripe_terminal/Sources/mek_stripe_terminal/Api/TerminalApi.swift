@@ -131,6 +131,10 @@ protocol TerminalPlatformApi {
         _ configuration: SimulatorConfigurationApi
     ) throws -> Void
 
+    func onSetSimulatedOfflineModeConfiguration(
+        _ configuration: SimulatedOfflineModeConfigurationApi
+    ) throws -> Void
+
     func onGetPaymentStatus() throws -> PaymentStatusApi
 
     func onCreatePaymentIntent(
@@ -161,7 +165,8 @@ protocol TerminalPlatformApi {
     func onStartConfirmPaymentIntent(
         _ result: Result<PaymentIntentApi>,
         _ operationId: Int,
-        _ paymentIntentId: String
+        _ paymentIntentId: String,
+        _ surcharge: SurchargeConfigurationApi?
     ) throws
 
     func onStopConfirmPaymentIntent(
@@ -354,6 +359,9 @@ func setTerminalPlatformApiHandler(
             case "setSimulatorConfiguration":
                 let res = try hostApi.onSetSimulatorConfiguration(SimulatorConfigurationApi.deserialize(args[0] as! [Any?]))
                 result(nil)
+            case "setSimulatedOfflineModeConfiguration":
+                let res = try hostApi.onSetSimulatedOfflineModeConfiguration(SimulatedOfflineModeConfigurationApi.deserialize(args[0] as! [Any?]))
+                result(nil)
             case "getPaymentStatus":
                 let res = try hostApi.onGetPaymentStatus()
                 result(res.rawValue)
@@ -377,7 +385,7 @@ func setTerminalPlatformApiHandler(
                 }
             case "startConfirmPaymentIntent":
                 let res = Result<PaymentIntentApi>(result) { $0.serialize() }
-                try hostApi.onStartConfirmPaymentIntent(res, args[0] as! Int, args[1] as! String)
+                try hostApi.onStartConfirmPaymentIntent(res, args[0] as! Int, args[1] as! String, !(args[2] is NSNull) ? SurchargeConfigurationApi.deserialize(args[2] as! [Any?]) : nil)
             case "stopConfirmPaymentIntent":
                 runAsync {
                     try await hostApi.onStopConfirmPaymentIntent(args[0] as! Int)
@@ -618,10 +626,12 @@ enum AllowRedisplayApi: Int {
 }
 
 struct AmountDetailsApi {
+    let surcharge: SurchargeDetailsApi?
     let tip: TipApi?
 
     func serialize() -> [Any?] {
         return [
+            surcharge?.serialize(),
             tip?.serialize(),
         ]
     }
@@ -844,13 +854,15 @@ func deserializeConnectionConfigurationApi(
 struct BluetoothConnectionConfigurationApi: ConnectionConfigurationApi {
     let autoReconnectOnUnexpectedDisconnect: Bool
     let locationId: String
+    let testReaderUpdate: TestReaderUpdateApi?
 
     static func deserialize(
         _ serialized: [Any?]
     ) -> BluetoothConnectionConfigurationApi {
         return BluetoothConnectionConfigurationApi(
             autoReconnectOnUnexpectedDisconnect: serialized[0] as! Bool,
-            locationId: serialized[1] as! String
+            locationId: serialized[1] as! String,
+            testReaderUpdate: !(serialized[2] is NSNull) ? TestReaderUpdateApi.deserialize(serialized[2] as! [Any?]) : nil
         )
     }
 }
@@ -904,13 +916,15 @@ struct TapToPayConnectionConfigurationApi: ConnectionConfigurationApi {
 struct UsbConnectionConfigurationApi: ConnectionConfigurationApi {
     let autoReconnectOnUnexpectedDisconnect: Bool
     let locationId: String
+    let testReaderUpdate: TestReaderUpdateApi?
 
     static func deserialize(
         _ serialized: [Any?]
     ) -> UsbConnectionConfigurationApi {
         return UsbConnectionConfigurationApi(
             autoReconnectOnUnexpectedDisconnect: serialized[0] as! Bool,
-            locationId: serialized[1] as! String
+            locationId: serialized[1] as! String,
+            testReaderUpdate: !(serialized[2] is NSNull) ? TestReaderUpdateApi.deserialize(serialized[2] as! [Any?]) : nil
         )
     }
 }
@@ -1633,6 +1647,27 @@ enum SimulatedCardTypeApi: Int {
     case offlinePinScaRetry
 }
 
+enum SimulatedOfflineModeApi: Int {
+    case disabled
+    case offlineImmediate
+    case offlineTimeout
+    case offlineIntermittent
+}
+
+struct SimulatedOfflineModeConfigurationApi {
+    let readerOfflineMode: SimulatedOfflineModeApi
+    let sdkOfflineMode: SimulatedOfflineModeApi
+
+    static func deserialize(
+        _ serialized: [Any?]
+    ) -> SimulatedOfflineModeConfigurationApi {
+        return SimulatedOfflineModeConfigurationApi(
+            readerOfflineMode: SimulatedOfflineModeApi(rawValue: serialized[0] as! Int)!,
+            sdkOfflineMode: SimulatedOfflineModeApi(rawValue: serialized[1] as! Int)!
+        )
+    }
+}
+
 struct SimulatorConfigurationApi {
     let simulatedCard: SimulatedCardApi
     let simulatedTipAmount: Int?
@@ -1647,6 +1682,58 @@ struct SimulatorConfigurationApi {
             update: SimulateReaderUpdateApi(rawValue: serialized[2] as! Int)!
         )
     }
+}
+
+struct SurchargeConfigurationApi {
+    let amount: Int
+    let consent: SurchargeConsentApi?
+
+    static func deserialize(
+        _ serialized: [Any?]
+    ) -> SurchargeConfigurationApi {
+        return SurchargeConfigurationApi(
+            amount: serialized[0] as! Int,
+            consent: !(serialized[1] is NSNull) ? SurchargeConsentApi.deserialize(serialized[1] as! [Any?]) : nil
+        )
+    }
+}
+
+struct SurchargeConsentApi {
+    let collection: SurchargeConsentCollectionApi
+    let notice: String?
+
+    static func deserialize(
+        _ serialized: [Any?]
+    ) -> SurchargeConsentApi {
+        return SurchargeConsentApi(
+            collection: SurchargeConsentCollectionApi(rawValue: serialized[0] as! Int)!,
+            notice: serialized[1] as? String
+        )
+    }
+}
+
+enum SurchargeConsentCollectionApi: Int {
+    case enabled
+    case disabled
+}
+
+struct SurchargeDetailsApi {
+    let amount: Int?
+    let maximumAmount: Int?
+    let status: SurchargeStatusApi?
+
+    func serialize() -> [Any?] {
+        return [
+            amount,
+            maximumAmount,
+            status?.rawValue,
+        ]
+    }
+}
+
+enum SurchargeStatusApi: Int {
+    case available
+    case unavailable
 }
 
 struct TapToPayUxConfigurationApi {
@@ -1887,6 +1974,31 @@ enum TerminalExceptionCodeApi: Int {
     case surchargeNoticeRequiresUpdatePaymentIntent
     case surchargeUnavailableWithDynamicCurrencyConversion
     case tapToPayUnsupportedProcessor
+}
+
+// The one_for_all generator doesn't discover types only reachable through a sealed
+// ConnectionConfiguration child's own fields (e.g. BluetoothConnectionConfigurationApi.testReaderUpdate),
+// so TestReaderUpdateApi/TestReaderUpdateTypeApi are hand-written rather than generated.
+struct TestReaderUpdateApi {
+    let components: [UpdateComponentApi]?
+    let updateType: TestReaderUpdateTypeApi
+
+    static func deserialize(
+        _ serialized: [Any?]
+    ) -> TestReaderUpdateApi {
+        return TestReaderUpdateApi(
+            components: (serialized[0] as? [Any?])?.map { UpdateComponentApi(rawValue: $0 as! Int)! },
+            updateType: TestReaderUpdateTypeApi(rawValue: serialized[1] as! Int)!
+        )
+    }
+}
+
+enum TestReaderUpdateTypeApi: Int {
+    case available
+    case required
+    case requiredOffline
+    case lowBattery
+    case lowBatterySucceedConnect
 }
 
 struct TipApi {

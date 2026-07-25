@@ -174,6 +174,18 @@ class _$TerminalPlatform implements TerminalPlatform {
   }
 
   @override
+  Future<void> setSimulatedOfflineModeConfiguration(
+      SimulatedOfflineModeConfiguration configuration) async {
+    try {
+      await _$channel.invokeMethod('setSimulatedOfflineModeConfiguration',
+          [_$serializeSimulatedOfflineModeConfiguration(configuration)]);
+    } on PlatformException catch (exception) {
+      TerminalPlatform._throwIfIsHostException(exception);
+      rethrow;
+    }
+  }
+
+  @override
   Future<PaymentStatus> getPaymentStatus() async {
     try {
       final result = await _$channel.invokeMethod('getPaymentStatus', []);
@@ -249,13 +261,17 @@ class _$TerminalPlatform implements TerminalPlatform {
   }
 
   @override
-  Future<PaymentIntent> startConfirmPaymentIntent(
-    int operationId,
-    String paymentIntentId,
-  ) async {
+  Future<PaymentIntent> startConfirmPaymentIntent({
+    required int operationId,
+    required String paymentIntentId,
+    required SurchargeConfiguration? surcharge,
+  }) async {
     try {
-      final result =
-          await _$channel.invokeMethod('startConfirmPaymentIntent', [operationId, paymentIntentId]);
+      final result = await _$channel.invokeMethod('startConfirmPaymentIntent', [
+        operationId,
+        paymentIntentId,
+        surcharge != null ? _$serializeSurchargeConfiguration(surcharge) : null
+      ]);
       return _$deserializePaymentIntent(result as List);
     } on PlatformException catch (exception) {
       TerminalPlatform._throwIfIsHostException(exception);
@@ -530,8 +546,9 @@ Address _$deserializeAddress(List<Object?> serialized) => Address(
     line2: serialized[3] as String?,
     postalCode: serialized[4] as String?,
     state: serialized[5] as String?);
-AmountDetails _$deserializeAmountDetails(List<Object?> serialized) =>
-    AmountDetails(tip: serialized[0] != null ? _$deserializeTip(serialized[0] as List) : null);
+AmountDetails _$deserializeAmountDetails(List<Object?> serialized) => AmountDetails(
+    surcharge: serialized[0] != null ? _$deserializeSurchargeDetails(serialized[0] as List) : null,
+    tip: serialized[1] != null ? _$deserializeTip(serialized[1] as List) : null);
 CardDetails _$deserializeCardDetails(List<Object?> serialized) => CardDetails(
     brand: serialized[0] != null ? CardBrand.values[serialized[0] as int] : null,
     country: serialized[1] as String?,
@@ -596,7 +613,10 @@ List<Object?> _$serializeBluetoothConnectionConfiguration(
     [
       'BluetoothConnectionConfiguration',
       deserialized.autoReconnectOnUnexpectedDisconnect,
-      deserialized.locationId
+      deserialized.locationId,
+      deserialized.testReaderUpdate != null
+          ? _$serializeTestReaderUpdate(deserialized.testReaderUpdate!)
+          : null
     ];
 List<Object?> _$serializeHandoffConnectionConfiguration(
         HandoffConnectionConfiguration deserialized) =>
@@ -618,7 +638,10 @@ List<Object?> _$serializeTapToPayConnectionConfiguration(
 List<Object?> _$serializeUsbConnectionConfiguration(UsbConnectionConfiguration deserialized) => [
       'UsbConnectionConfiguration',
       deserialized.autoReconnectOnUnexpectedDisconnect,
-      deserialized.locationId
+      deserialized.locationId,
+      deserialized.testReaderUpdate != null
+          ? _$serializeTestReaderUpdate(deserialized.testReaderUpdate!)
+          : null
     ];
 List<Object?> _$serializeDiscoveryConfiguration(DiscoveryConfiguration deserialized) =>
     switch (deserialized) {
@@ -828,11 +851,24 @@ SetupIntent _$deserializeSetupIntent(List<Object?> serialized) => SetupIntent(
     usage: SetupIntentUsage.values[serialized[6] as int]);
 List<Object?> _$serializeSimulatedCard(SimulatedCard deserialized) =>
     [deserialized.testCardNumber, deserialized.type?.index];
+List<Object?> _$serializeSimulatedOfflineModeConfiguration(
+        SimulatedOfflineModeConfiguration deserialized) =>
+    [deserialized.readerOfflineMode.index, deserialized.sdkOfflineMode.index];
 List<Object?> _$serializeSimulatorConfiguration(SimulatorConfiguration deserialized) => [
       _$serializeSimulatedCard(deserialized.simulatedCard),
       deserialized.simulatedTipAmount,
       deserialized.update.index
     ];
+List<Object?> _$serializeSurchargeConfiguration(SurchargeConfiguration deserialized) => [
+      deserialized.amount,
+      deserialized.consent != null ? _$serializeSurchargeConsent(deserialized.consent!) : null
+    ];
+List<Object?> _$serializeSurchargeConsent(SurchargeConsent deserialized) =>
+    [deserialized.collection.index, deserialized.notice];
+SurchargeDetails _$deserializeSurchargeDetails(List<Object?> serialized) => SurchargeDetails(
+    amount: serialized[0] as int?,
+    maximumAmount: serialized[1] as int?,
+    status: serialized[2] != null ? SurchargeStatus.values[serialized[2] as int] : null);
 List<Object?> _$serializeTapToPayUxConfiguration(TapToPayUxConfiguration deserialized) => [
       deserialized.colors != null
           ? _$serializeTapToPayUxConfigurationColorScheme(deserialized.colors!)
@@ -862,6 +898,13 @@ TerminalException _$deserializeTerminalException(List<Object?> serialized) => Te
     message: serialized[2] as String,
     paymentIntent: serialized[3] != null ? _$deserializePaymentIntent(serialized[3] as List) : null,
     stackTrace: serialized[4] as String?);
+// The one_for_all generator doesn't discover types only reachable through a sealed
+// ConnectionConfiguration child's own fields (e.g. BluetoothConnectionConfiguration.testReaderUpdate),
+// so this function is hand-written rather than generated. Keep in sync with TestReaderUpdate.
+List<Object?> _$serializeTestReaderUpdate(TestReaderUpdate deserialized) => [
+      deserialized.components?.map((e) => e.index).toList(),
+      deserialized.updateType.index
+    ];
 Tip _$deserializeTip(List<Object?> serialized) => Tip(amount: serialized[0] as int?);
 List<Object?> _$serializeTippingConfiguration(TippingConfiguration deserialized) =>
     [deserialized.eligibleAmount];

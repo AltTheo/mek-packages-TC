@@ -8,6 +8,7 @@ part of 'reader_software_update.dart';
 
 mixin _$ReaderSoftwareUpdate {
   ReaderSoftwareUpdate get _self => this as ReaderSoftwareUpdate;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -21,6 +22,7 @@ mixin _$ReaderSoftwareUpdate {
           _self.settingsVersion == other.settingsVersion &&
           _self.timeEstimate == other.timeEstimate &&
           _self.version == other.version;
+
   @override
   int get hashCode {
     var hashCode = 0;

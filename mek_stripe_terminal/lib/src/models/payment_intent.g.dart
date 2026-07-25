@@ -8,6 +8,7 @@ part of 'payment_intent.dart';
 
 mixin _$PaymentIntent {
   PaymentIntent get _self => this as PaymentIntent;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -43,6 +44,7 @@ mixin _$PaymentIntent {
           _self.receiptEmail == other.receiptEmail &&
           _self.setupFutureUsage == other.setupFutureUsage &&
           _self.transferGroup == other.transferGroup;
+
   @override
   int get hashCode {
     var hashCode = 0;
@@ -116,6 +118,7 @@ mixin _$PaymentIntent {
 
 mixin _$PaymentIntentParameters {
   PaymentIntentParameters get _self => this as PaymentIntentParameters;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -139,6 +142,7 @@ mixin _$PaymentIntentParameters {
           _self.setupFutureUsage == other.setupFutureUsage &&
           _self.paymentMethodOptionsParameters ==
               other.paymentMethodOptionsParameters;
+
   @override
   int get hashCode {
     var hashCode = 0;
@@ -188,12 +192,14 @@ mixin _$PaymentIntentParameters {
 mixin _$PaymentMethodOptionsParameters {
   PaymentMethodOptionsParameters get _self =>
       this as PaymentMethodOptionsParameters;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is PaymentMethodOptionsParameters &&
           runtimeType == other.runtimeType &&
           _self.cardPresentParameters == other.cardPresentParameters;
+
   @override
   int get hashCode {
     var hashCode = 0;

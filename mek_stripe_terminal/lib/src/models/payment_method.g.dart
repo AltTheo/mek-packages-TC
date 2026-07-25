@@ -8,6 +8,7 @@ part of 'payment_method.dart';
 
 mixin _$PaymentMethod {
   PaymentMethod get _self => this as PaymentMethod;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -19,6 +20,7 @@ mixin _$PaymentMethod {
           _self.interacPresent == other.interacPresent &&
           _self.customerId == other.customerId &&
           $mapEquality.equals(_self.metadata, other.metadata);
+
   @override
   int get hashCode {
     var hashCode = 0;

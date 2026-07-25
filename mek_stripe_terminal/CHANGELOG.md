@@ -1,5 +1,11 @@
 
 
+## 5.7.0
+- feat: bumped android and ios sdk version to `5.7.0`
+- feat(terminal): exposed `isTapToPayAccountLinked` result properly and added `surcharge` details to `AmountDetails`, plus a `surcharge` param on `confirmPaymentIntent` for preview surcharge collection. Requires Stripe to enable the feature on your account.
+- feat(terminal): added `Terminal.setSimulatedOfflineModeConfiguration` for simulating offline payment flows in test mode without a physical network disruption
+- feat: added `testReaderUpdate` param on `BluetoothConnectionConfiguration` and `UsbConnectionConfiguration` to simulate reader software update scenarios in test mode
+
 ## 4.6.3
 - fix: deleted a trailing comma that was causing a compilation error on  Xcode versions priors to 16.3
 

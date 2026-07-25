@@ -86,6 +86,7 @@ fun PaymentIntentStatus.toApi(): PaymentIntentStatusApi {
 
 fun AmountDetails.toApi(): AmountDetailsApi {
     return AmountDetailsApi(
+        surcharge = surcharge?.toApi(),
         tip = tip?.toApi()
     )
 }

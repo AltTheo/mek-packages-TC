@@ -159,6 +159,10 @@ public class TerminalPlugin: NSObject, FlutterPlugin, TerminalPlatformApi {
         Terminal.shared.simulatorConfiguration.simulatedCard = configuration.simulatedCard.toHost()
         Terminal.shared.simulatorConfiguration.simulatedTipAmount = configuration.simulatedTipAmount?.nsNumberValue
     }
+
+    func onSetSimulatedOfflineModeConfiguration(_ configuration: SimulatedOfflineModeConfigurationApi) throws {
+        try Terminal.shared.setSimulatedOfflineModeConfiguration(configuration.toHost())
+    }
     
 // MARK: - Taking payments
     
@@ -239,10 +243,14 @@ public class TerminalPlugin: NSObject, FlutterPlugin, TerminalPlatformApi {
     func onStartConfirmPaymentIntent(
         _ result: Result<PaymentIntentApi>,
         _ operationId: Int,
-        _ paymentIntentId: String
+        _ paymentIntentId: String,
+        _ surcharge: SurchargeConfigurationApi?
     ) throws {
         let paymentIntent = try _findPaymentIntent(paymentIntentId)
-        Terminal.shared.confirmPaymentIntent(paymentIntent, completion: { paymentIntent, error in
+        let confirmConfig = surcharge != nil ? try ConfirmPaymentIntentConfigurationBuilder()
+            .setSurchargeConfiguration(try surcharge!.toHost())
+            .build() : nil
+        Terminal.shared.confirmPaymentIntent(paymentIntent, confirmConfig: confirmConfig, completion: { paymentIntent, error in
             self._cancelablesCollectPaymentMethod.removeValue(forKey: operationId)
             if let error = error {
                 result.error(error.toPlatformError())

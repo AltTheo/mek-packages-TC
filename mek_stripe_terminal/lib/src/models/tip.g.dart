@@ -8,12 +8,14 @@ part of 'tip.dart';
 
 mixin _$Tip {
   Tip get _self => this as Tip;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is Tip &&
           runtimeType == other.runtimeType &&
           _self.amount == other.amount;
+
   @override
   int get hashCode {
     var hashCode = 0;
@@ -28,12 +30,14 @@ mixin _$Tip {
 
 mixin _$TippingConfiguration {
   TippingConfiguration get _self => this as TippingConfiguration;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is TippingConfiguration &&
           runtimeType == other.runtimeType &&
           _self.eligibleAmount == other.eligibleAmount;
+
   @override
   int get hashCode {
     var hashCode = 0;

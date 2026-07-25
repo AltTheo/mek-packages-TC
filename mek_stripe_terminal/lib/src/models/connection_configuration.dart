@@ -1,3 +1,4 @@
+import 'package:mek_stripe_terminal/src/models/test_reader_update.dart';
 import 'package:mek_stripe_terminal/src/reader_delegates.dart';
 import 'package:one_for_all/one_for_all.dart';
 
@@ -14,10 +15,14 @@ class BluetoothConnectionConfiguration extends ConnectionConfiguration {
   @SerializableParam.ignore()
   final MobileReaderDelegate readerDelegate;
 
+  /// Simulates a reader software update scenario in test mode. Set before connecting.
+  final TestReaderUpdate? testReaderUpdate;
+
   const BluetoothConnectionConfiguration({
     required this.locationId,
     this.autoReconnectOnUnexpectedDisconnect = true,
     required this.readerDelegate,
+    this.testReaderUpdate,
   });
 }
 
@@ -86,9 +91,13 @@ class UsbConnectionConfiguration extends ConnectionConfiguration {
   @SerializableParam.ignore()
   final MobileReaderDelegate? readerDelegate;
 
+  /// Simulates a reader software update scenario in test mode. Set before connecting.
+  final TestReaderUpdate? testReaderUpdate;
+
   const UsbConnectionConfiguration({
     required this.locationId,
     this.autoReconnectOnUnexpectedDisconnect = true,
     required this.readerDelegate,
+    this.testReaderUpdate,
   });
 }

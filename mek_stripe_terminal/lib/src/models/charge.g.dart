@@ -8,6 +8,7 @@ part of 'charge.dart';
 
 mixin _$Charge {
   Charge get _self => this as Charge;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -24,6 +25,7 @@ mixin _$Charge {
           _self.calculatedStatementDescriptor ==
               other.calculatedStatementDescriptor &&
           _self.authorizationCode == other.authorizationCode;
+
   @override
   int get hashCode {
     var hashCode = 0;

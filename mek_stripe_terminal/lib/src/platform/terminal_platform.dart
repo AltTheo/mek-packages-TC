@@ -17,8 +17,11 @@ import 'package:mek_stripe_terminal/src/models/reader.dart';
 import 'package:mek_stripe_terminal/src/models/reader_software_update.dart';
 import 'package:mek_stripe_terminal/src/models/refund.dart';
 import 'package:mek_stripe_terminal/src/models/setup_intent.dart';
+import 'package:mek_stripe_terminal/src/models/simulated_offline_mode.dart';
 import 'package:mek_stripe_terminal/src/models/simultator_configuration.dart';
+import 'package:mek_stripe_terminal/src/models/surcharge.dart';
 import 'package:mek_stripe_terminal/src/models/tap_to_pay_ux_configuration.dart';
+import 'package:mek_stripe_terminal/src/models/test_reader_update.dart';
 import 'package:mek_stripe_terminal/src/models/tip.dart';
 import 'package:mek_stripe_terminal/src/reader_delegates.dart';
 import 'package:mek_stripe_terminal/src/terminal_exception.dart';
@@ -78,6 +81,13 @@ abstract class TerminalPlatform {
 
   @MethodApi(kotlin: MethodApiType.sync, swift: MethodApiType.sync)
   Future<void> setSimulatorConfiguration(SimulatorConfiguration configuration);
+
+  /// Configures simulated offline mode, for testing offline payment flows without a physical
+  /// network disruption.
+  ///
+  /// This is a preview feature. To request access, contact Stripe Support.
+  @MethodApi(kotlin: MethodApiType.sync, swift: MethodApiType.sync)
+  Future<void> setSimulatedOfflineModeConfiguration(SimulatedOfflineModeConfiguration configuration);
 //endregion
 
 //region Taking payments
@@ -104,7 +114,11 @@ abstract class TerminalPlatform {
   Future<void> stopCollectPaymentMethod(int operationId);
 
   @MethodApi(swift: MethodApiType.callbacks)
-  Future<PaymentIntent> startConfirmPaymentIntent(int operationId, String paymentIntentId);
+  Future<PaymentIntent> startConfirmPaymentIntent({
+    required int operationId,
+    required String paymentIntentId,
+    required SurchargeConfiguration? surcharge,
+  });
 
   Future<void> stopConfirmPaymentIntent(int operationId);
 

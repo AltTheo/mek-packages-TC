@@ -10,7 +10,7 @@ let package = Package(
         .library(name: "mek-stripe-terminal", targets: ["mek_stripe_terminal"])
     ],
     dependencies: [
-        .package(url: "https://github.com/stripe/stripe-terminal-ios", from: "5.5.0"),
+        .package(url: "https://github.com/stripe/stripe-terminal-ios", from: "5.7.0"),
         .package(name: "FlutterFramework", path: "../FlutterFramework"),
     ],
     targets: [

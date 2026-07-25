@@ -14,7 +14,8 @@ fun ConnectionConfigurationApi.toHost(readerDelegate: ReaderDelegatePlugin): Con
         is BluetoothConnectionConfigurationApi -> ConnectionConfiguration.BluetoothConnectionConfiguration(
             locationId = locationId,
             autoReconnectOnUnexpectedDisconnect = autoReconnectOnUnexpectedDisconnect,
-            bluetoothReaderListener = readerDelegate
+            bluetoothReaderListener = readerDelegate,
+            testReaderUpdate = testReaderUpdate?.toHost()
         )
 //        is EmbeddedConnectionConfigurationApi -> ConnectionConfiguration.EmbeddedConnectionConfiguration(
 //            posConnectionType = ,
@@ -39,7 +40,8 @@ fun ConnectionConfigurationApi.toHost(readerDelegate: ReaderDelegatePlugin): Con
         is UsbConnectionConfigurationApi -> ConnectionConfiguration.UsbConnectionConfiguration(
             locationId = locationId,
             autoReconnectOnUnexpectedDisconnect = autoReconnectOnUnexpectedDisconnect,
-            usbReaderListener = readerDelegate
+            usbReaderListener = readerDelegate,
+            testReaderUpdate = testReaderUpdate?.toHost()
         )
     }
 }

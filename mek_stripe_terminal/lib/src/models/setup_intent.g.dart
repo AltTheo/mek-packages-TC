@@ -8,6 +8,7 @@ part of 'setup_intent.dart';
 
 mixin _$SetupIntent {
   SetupIntent get _self => this as SetupIntent;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -20,6 +21,7 @@ mixin _$SetupIntent {
           _self.usage == other.usage &&
           _self.status == other.status &&
           _self.latestAttempt == other.latestAttempt;
+
   @override
   int get hashCode {
     var hashCode = 0;
@@ -47,6 +49,7 @@ mixin _$SetupIntent {
 
 mixin _$SetupAttempt {
   SetupAttempt get _self => this as SetupAttempt;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -61,6 +64,7 @@ mixin _$SetupAttempt {
           _self.paymentMethodDetails == other.paymentMethodDetails &&
           _self.setupIntentId == other.setupIntentId &&
           _self.status == other.status;
+
   @override
   int get hashCode {
     var hashCode = 0;
@@ -93,6 +97,7 @@ mixin _$SetupAttempt {
 mixin _$SetupAttemptPaymentMethodDetails {
   SetupAttemptPaymentMethodDetails get _self =>
       this as SetupAttemptPaymentMethodDetails;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -100,6 +105,7 @@ mixin _$SetupAttemptPaymentMethodDetails {
           runtimeType == other.runtimeType &&
           _self.cardPresent == other.cardPresent &&
           _self.interacPresent == other.interacPresent;
+
   @override
   int get hashCode {
     var hashCode = 0;
@@ -118,6 +124,7 @@ mixin _$SetupAttemptPaymentMethodDetails {
 mixin _$SetupAttemptCardPresentDetails {
   SetupAttemptCardPresentDetails get _self =>
       this as SetupAttemptCardPresentDetails;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -125,6 +132,7 @@ mixin _$SetupAttemptCardPresentDetails {
           runtimeType == other.runtimeType &&
           _self.emvAuthData == other.emvAuthData &&
           _self.generatedCard == other.generatedCard;
+
   @override
   int get hashCode {
     var hashCode = 0;

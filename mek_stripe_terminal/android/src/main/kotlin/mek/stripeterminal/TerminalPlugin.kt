@@ -1,8 +1,11 @@
+@file:OptIn(Surcharging::class)
+
 package mek.stripeterminal
 
 import android.content.Context
 import com.stripe.stripeterminal.Terminal
 import com.stripe.stripeterminal.TerminalApplicationDelegate
+import com.stripe.stripeterminal.external.Surcharging
 import com.stripe.stripeterminal.external.callable.Callback
 import com.stripe.stripeterminal.external.callable.Cancelable
 import com.stripe.stripeterminal.external.callable.LocationListCallback
@@ -48,7 +51,9 @@ import mek.stripeterminal.api.RefundApi
 import mek.stripeterminal.api.Result
 import mek.stripeterminal.api.SetupIntentApi
 import mek.stripeterminal.api.SetupIntentUsageApi
+import mek.stripeterminal.api.SimulatedOfflineModeConfigurationApi
 import mek.stripeterminal.api.SimulatorConfigurationApi
+import mek.stripeterminal.api.SurchargeConfigurationApi
 import mek.stripeterminal.api.TapToPayUxConfigurationApi
 import mek.stripeterminal.api.TerminalExceptionCodeApi
 import mek.stripeterminal.api.TerminalHandlersApi
@@ -226,6 +231,12 @@ class TerminalPlatformPlugin(
     override fun onSetSimulatorConfiguration(configuration: SimulatorConfigurationApi) {
         terminal.simulatorConfiguration = configuration.toHost()
     }
+
+    override fun onSetSimulatedOfflineModeConfiguration(
+        configuration: SimulatedOfflineModeConfigurationApi
+    ) {
+        terminal.simulatedOfflineModeConfiguration = configuration.toHost()
+    }
     // endregion
 
     // region Taking Payment
@@ -325,9 +336,13 @@ class TerminalPlatformPlugin(
     override fun onStartConfirmPaymentIntent(
         result: Result<PaymentIntentApi>,
         operationId: Long,
-        paymentIntentId: String
+        paymentIntentId: String,
+        surcharge: SurchargeConfigurationApi?
     ) {
         val paymentIntent = findPaymentIntent(paymentIntentId)
+        val confirmConfig = ConfirmPaymentIntentConfiguration.Builder()
+            .apply { surcharge?.let { setSurcharge(it.toHost()) } }
+            .build()
         confirmPaymentIntentCancelables[operationId]= terminal.confirmPaymentIntent(
             paymentIntent,
             object : TerminalErrorHandler(result::error), PaymentIntentCallback {
@@ -343,7 +358,8 @@ class TerminalPlatformPlugin(
                     paymentIntents.remove(paymentIntent.id)
                     result.success(paymentIntent.toApi())
                 }
-            }
+            },
+            confirmConfig
         )
     }
 

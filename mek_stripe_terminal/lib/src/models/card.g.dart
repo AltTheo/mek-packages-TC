@@ -8,6 +8,7 @@ part of 'card.dart';
 
 mixin _$CardDetails {
   CardDetails get _self => this as CardDetails;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -19,6 +20,7 @@ mixin _$CardDetails {
           _self.expYear == other.expYear &&
           _self.funding == other.funding &&
           _self.last4 == other.last4;
+
   @override
   int get hashCode {
     var hashCode = 0;
@@ -44,6 +46,7 @@ mixin _$CardDetails {
 
 mixin _$CardPresentDetails {
   CardPresentDetails get _self => this as CardPresentDetails;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -62,6 +65,7 @@ mixin _$CardPresentDetails {
               other.incrementalAuthorizationStatus &&
           _self.networks == other.networks &&
           _self.receipt == other.receipt;
+
   @override
   int get hashCode {
     var hashCode = 0;
@@ -101,6 +105,7 @@ mixin _$CardPresentDetails {
 
 mixin _$CardNetworks {
   CardNetworks get _self => this as CardNetworks;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -108,6 +113,7 @@ mixin _$CardNetworks {
           runtimeType == other.runtimeType &&
           $listEquality.equals(_self.available, other.available) &&
           _self.preferred == other.preferred;
+
   @override
   int get hashCode {
     var hashCode = 0;
@@ -125,6 +131,7 @@ mixin _$CardNetworks {
 
 mixin _$ReceiptDetails {
   ReceiptDetails get _self => this as ReceiptDetails;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -140,6 +147,7 @@ mixin _$ReceiptDetails {
               other.transactionStatusInformation &&
           _self.terminalVerificationResults ==
               other.terminalVerificationResults;
+
   @override
   int get hashCode {
     var hashCode = 0;
@@ -172,6 +180,7 @@ mixin _$ReceiptDetails {
 
 mixin _$CardPresentParameters {
   CardPresentParameters get _self => this as CardPresentParameters;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -183,6 +192,7 @@ mixin _$CardPresentParameters {
           _self.requestIncrementalAuthorizationSupport ==
               other.requestIncrementalAuthorizationSupport &&
           _self.requestedPriority == other.requestedPriority;
+
   @override
   int get hashCode {
     var hashCode = 0;

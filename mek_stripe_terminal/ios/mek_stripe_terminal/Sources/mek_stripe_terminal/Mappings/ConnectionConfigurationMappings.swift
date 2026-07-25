@@ -4,12 +4,13 @@ extension ConnectionConfigurationApi {
     func toHost(_ delegate: ReaderDelegatePlugin) throws -> ConnectionConfiguration? {
         switch self {
         case let config as BluetoothConnectionConfigurationApi:
-            return try BluetoothConnectionConfigurationBuilder(
+            let b = BluetoothConnectionConfigurationBuilder(
                 delegate: delegate,
                 locationId: config.locationId
             )
             .setAutoReconnectOnUnexpectedDisconnect(config.autoReconnectOnUnexpectedDisconnect)
-            .build()
+            if let it = config.testReaderUpdate { b.setTestReaderUpdate(it.toHost()) }
+            return try b.build()
         case let config as HandoffConnectionConfigurationApi:
             return nil
         case let config as InternetConnectionConfigurationApi:
