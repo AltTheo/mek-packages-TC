@@ -1,4 +1,7 @@
 
+## 3.6.0
+- feat: added support to `fast_immutable_collections` and `built_collections`
+
 ## 3.5.1
 - fix: fixed support to custom primitive types serialization
 

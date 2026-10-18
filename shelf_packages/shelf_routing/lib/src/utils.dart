@@ -14,9 +14,19 @@ T $parsePathParameter<T>(String value, T Function(String vl) parser) {
 }
 
 /// Generator utils
+@Deprecated('Regenerate code updating shelf_routing_generator package to ^3.1.0.')
 T $parseQueryParameters<T>(Request request, String name, T Function(List<String> vls) parser) {
   try {
     return parser(request.url.queryParametersAll[name] ?? const <String>[]);
+  } catch (error, stackTrace) {
+    throw BadRequestException.queryParameter(error, stackTrace, name);
+  }
+}
+
+/// Generator utils
+T $parseQueryParametersAll<T>(Request request, String name, T Function(List<String>? data) parser) {
+  try {
+    return parser(request.url.queryParametersAll[name]);
   } catch (error, stackTrace) {
     throw BadRequestException.queryParameter(error, stackTrace, name);
   }

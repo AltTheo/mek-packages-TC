@@ -75,19 +75,19 @@ class SchemasRegistry {
       );
     }
 
-    if (context.iterables && (dartType.isDartCoreList || dartType.isDartCoreSet)) {
+    if (context.iterables && TypeCheckers.listOrSet.isAssignableFromType(dartType)) {
       final typeArgument = (dartType as ParameterizedType).typeArguments.single;
 
       return SchemaOpenApi(
         description: doc.summaryAndDescription,
         example: doc.example,
         type: TypeOpenApi.array,
-        uniqueItems: dartType.isDartCoreSet,
+        uniqueItems: TypeCheckers.set.isAssignableFromType(dartType),
         items: _buildAndRegister(context, Doc.none, typeArgument),
       );
     }
 
-    if (context.object && dartType.isDartCoreMap) {
+    if (context.object && TypeCheckers.map.isAssignableFromType(dartType)) {
       final [keyType, valueType] = (dartType as ParameterizedType).typeArguments;
 
       if (!keyType.isDartCoreString && keyType.element is! EnumElement) {

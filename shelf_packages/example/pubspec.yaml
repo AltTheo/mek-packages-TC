@@ -25,6 +25,8 @@ dependencies:
   mek_data_class: ^2.1.0
   json_annotation: ^4.9.0
 
+  fast_immutable_collections:
+
 dev_dependencies:
   mek_lints: ^5.0.0
 

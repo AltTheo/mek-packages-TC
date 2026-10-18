@@ -1,5 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
+// ignore_for_file: cast_nullable_to_non_nullable
+
 part of 'files_controller.dart';
 
 // **************************************************************************
@@ -8,8 +10,8 @@ part of 'files_controller.dart';
 
 Router _$FilesControllerRouter(FilesController service) => Router()
   ..add('GET', '/', (Request request) async {
-    final body = await service.download(request);
-    return Response.ok(body);
+    final data = await service.download(request);
+    return Response.ok(data);
   })
   ..add('GET', '/via-response', (Request request) async {
     return await service.downloadViaResponse(request);

@@ -3,11 +3,12 @@ import 'dart:async';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart';
-import 'package:code_builder/code_builder.dart';
+import 'package:code_builder/code_builder.dart' hide FunctionType;
 import 'package:collection/collection.dart';
 import 'package:shelf_routing_generator/src/route_handler.dart';
 import 'package:shelf_routing_generator/src/utils.dart';
 import 'package:source_gen/source_gen.dart';
+import 'package:source_helper/source_helper.dart';
 
 Builder routingBuilder(BuilderOptions options) {
   return SharedPartBuilder(const [RoutingGenerator()], 'routing');
@@ -55,19 +56,43 @@ class RoutingGenerator extends Generator {
   }
 
   String _codeListParser(FormalParameterElement element, DartType type) {
-    if (type.isDartCoreList || type.isDartCoreSet) {
-      var parserCode = _codeParser(element, (type as InterfaceType).typeArguments.single);
-      if (parserCode != null) {
-        parserCode = '.map($parserCode).${type.isDartCoreSet ? 'toSet' : 'toList'}()';
+    if (TypeCheckers.iterable.isAssignableFromType(type)) {
+      if (type.isDartCoreList || type.isDartCoreSet) {
+        var parserCode = _codeParser(element, (type as InterfaceType).typeArguments.single);
+        if (parserCode != null) {
+          parserCode = '.map($parserCode).${type.isDartCoreSet ? 'toSet' : 'toList'}()';
+        }
+        return type.isNullableType
+            ? '(data) => data?${parserCode ?? ''}'
+            : '(data) => data!${parserCode ?? ''}';
       }
-      return '(vls) => vls${parserCode ?? ''}';
+
+      if (type case final InterfaceType type) {
+        final fromJsonConstructor = type.element.constructors.firstWhereOrNull((e) {
+          return e.name == 'fromJson';
+        });
+        final typeParameter = type.typeArguments.singleOrNull;
+        if (fromJsonConstructor != null && typeParameter != null) {
+          final parsingCode = _codeParser(element, typeParameter);
+          final fromJsonCode =
+              '${type.element.name}.fromJson('
+              'data, '
+              '(data) => ${parsingCode != null ? '$parsingCode(data as String)' : 'data as String'}'
+              ')';
+          return type.isNullableType
+              ? '(data) => data != null ? $fromJsonCode : null'
+              : '(data) => $fromJsonCode';
+        }
+      }
     }
-    var parserCode = _codeParser(element, type);
-    parserCode = parserCode != null ? '$parserCode(vls.single)' : 'vls.single';
-    if (type.isNullable) {
-      return '(vls) => vls.isNotEmpty ? $parserCode : null';
+
+    final parsingCode = _codeParser(element, type);
+    if (type.isNullableType) {
+      return '(data) => data != null && data.isNotEmpty '
+          '? ${parsingCode != null ? '$parsingCode(data.single)' : 'data.single'} '
+          ': null';
     } else {
-      return '(vls) => $parserCode';
+      return '(data) => ${parsingCode != null ? '$parsingCode(data!.single)' : 'data!.single'}';
     }
   }
 
@@ -82,7 +107,7 @@ class RoutingGenerator extends Generator {
     type as InterfaceType;
     if (type.isDartCoreList || type.isDartCoreSet) {
       return '(data! as List<dynamic>).map((data) {\n'
-          '  return ${_codeFromJson(type.typeArgument)};\n'
+          '  return ${_codeFromJson(type.typeArguments.single)};\n'
           '}).${type.isDartCoreSet ? 'toSet' : 'toList'}()\n';
     }
     if (type.isDartCoreMap) {
@@ -90,9 +115,31 @@ class RoutingGenerator extends Generator {
           '  return  MapEntry(k, ${_codeFromJson(type.typeArguments[1])});\n'
           '})\n';
     }
+
     final element = type.element as ClassElement;
     final constructor = element.constructors.firstWhere((e) => e.name == 'fromJson');
-    return '${type.getDisplayString()}.fromJson(data! as ${constructor.formalParameters.first.type.getDisplayString()})';
+
+    final args = <String>[
+      'data! as ${constructor.formalParameters.first.type.getDisplayString()}',
+      ...constructor.formalParameters.skip(1).map((parameter) {
+        final typeArgument = type.typeArguments.single;
+        return '(data) => ${_codeFromJson(typeArgument)}';
+      }),
+    ];
+    return '${type.getDisplayString()}.fromJson(${args.join(', ')})';
+  }
+
+  String _codeToJson(DartType type) {
+    if (type.isJson || type is! InterfaceType) return 'data';
+
+    final toJsonMethod = type.getMethod('toJson');
+    if (toJsonMethod == null) return 'data';
+
+    if (toJsonMethod.formalParameters.length == 1) {
+      final typeArgument = type.typeArguments.single;
+      return 'data.toJson((data) => ${_codeToJson(typeArgument)})';
+    }
+    return 'data.toJson()';
   }
 
   String _codeAddRoute(HttpRouteHandler __) {
@@ -140,7 +187,7 @@ class RoutingGenerator extends Generator {
       if (queryParameters.isNotEmpty)
         ...queryParameters.map((e) {
           final key = e.displayName;
-          return '${e.displayName}: \$parseQueryParameters(request, ${literalString(key)}, ${_codeListParser(e, e.type)})';
+          return '${e.displayName}: \$parseQueryParametersAll(request, ${literalString(key)}, ${_codeListParser(e, e.type)})';
         }),
     ];
     final methodParamsText = methodParams.expand((e) sync* {
@@ -156,8 +203,9 @@ class RoutingGenerator extends Generator {
       RouteReturnsVoid() => '$methodInvocation;\nreturn Response.ok(null);',
       RouteReturnsResponse() || RouteReturnsJsonResponse() => 'return $methodInvocation;',
       RouteReturnsBytes() ||
-      RouteReturnsText() => 'final body = $methodInvocation;\nreturn Response.ok(body);',
-      RouteReturnsJson() => 'final body = $methodInvocation;\nreturn JsonResponse.ok(body);',
+      RouteReturnsText() => 'final data = $methodInvocation;\nreturn Response.ok(data);',
+      RouteReturnsJson() =>
+        'final data = $methodInvocation;\nreturn JsonResponse.ok(${_codeToJson(returns.type)});',
     };
 
     if (verb == r'$all') {

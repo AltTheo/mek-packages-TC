@@ -1,4 +1,8 @@
 
+## 3.1.0
+- feat: added support to `fast_immutable_collection` package
+- fix: do not parsing nullable query parameters
+
 ## 3.0.2
 - chore: improved message error when parsing is not supported
 

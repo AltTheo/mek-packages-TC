@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_equals_and_hash_code_on_mutable_classes
+
 class Date implements Comparable<Date> {
   final DateTime _value;
 

@@ -128,6 +128,70 @@ paths:
               schema:
                 type: string
                 format: binary
+  /api-v1/collections:
+    put:
+      tags:
+        - CollectionsController
+      summary: createCollections
+      operationId: createCollections
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/CollectionDto"
+      responses:
+        200:
+          description: "Operation completed!"
+    post:
+      tags:
+        - CollectionsController
+      summary: fetchCollections
+      operationId: fetchCollections
+      parameters:
+        - name: languages
+          in: query
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+            uniqueItems: true
+        - name: conditions
+          in: query
+          required: true
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/ChatType"
+            uniqueItems: true
+        - name: languagesNullable
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+            uniqueItems: true
+        - name: conditionsNullable
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/ChatType"
+            uniqueItems: true
+      responses:
+        200:
+          description: "Operation completed!"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CollectionDto"
 components:
   schemas:
     ChatVisibility:
@@ -177,7 +241,29 @@ components:
         - chatId
         - description
         - sentAt
+    DocumentDto:
+      title: DocumentDto
+      type: object
+      properties:
+        id:
+          type: string
+      required:
+        - id
+    CollectionDto:
+      title: CollectionDto
+      type: object
+      properties:
+        title:
+          type: string
+        documents:
+          type: array
+          items:
+            $ref: "#/components/schemas/DocumentDto"
+      required:
+        - title
+        - documents
 tags:
   - name: ChatsController
   - name: MessagesController
   - name: FilesController
+  - name: CollectionsController

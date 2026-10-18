@@ -13,46 +13,54 @@ Router _$QueryParametersControllerRouter(QueryParametersController service) =>
       ..add('GET', '/single', (Request request) {
         return service.single(
           request,
-          integer: $parseQueryParameters(
+          integer: $parseQueryParametersAll(
             request,
             'integer',
-            (vls) => int.parse(vls.single),
+            (data) => int.parse(data!.single),
           ),
-          double: $parseQueryParameters(
+          double: $parseQueryParametersAll(
             request,
             'double',
-            (vls) => vls.isNotEmpty ? double.parse(vls.single) : null,
+            (data) => data != null && data.isNotEmpty
+                ? double.parse(data.single)
+                : null,
           ),
-          string: $parseQueryParameters(request, 'string', (vls) => vls.single),
-          stringOrNull: $parseQueryParameters(
+          string: $parseQueryParametersAll(
+            request,
+            'string',
+            (data) => data!.single,
+          ),
+          stringOrNull: $parseQueryParametersAll(
             request,
             'stringOrNull',
-            (vls) => vls.isNotEmpty ? vls.single : null,
+            (data) => data != null && data.isNotEmpty ? data.single : null,
           ),
-          customParser: $parseQueryParameters(
+          customParser: $parseQueryParametersAll(
             request,
             'customParser',
-            (vls) => vls.isNotEmpty ? DateTime.parse(vls.single) : null,
+            (data) => data != null && data.isNotEmpty
+                ? DateTime.parse(data.single)
+                : null,
           ),
         );
       })
       ..add('GET', '/list', (Request request) {
         return service.list(
           request,
-          stringList: $parseQueryParameters(
+          stringList: $parseQueryParametersAll(
             request,
             'stringList',
-            (vls) => vls,
+            (data) => data!,
           ),
-          integerList: $parseQueryParameters(
+          integerList: $parseQueryParametersAll(
             request,
             'integerList',
-            (vls) => vls.map(int.parse).toList(),
+            (data) => data!.map(int.parse).toList(),
           ),
-          customParserList: $parseQueryParameters(
+          customParserList: $parseQueryParametersAll(
             request,
             'customParserList',
-            (vls) => vls.map(DateTime.parse).toList(),
+            (data) => data!.map(DateTime.parse).toList(),
           ),
         );
       });
