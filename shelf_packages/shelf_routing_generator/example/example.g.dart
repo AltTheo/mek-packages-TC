@@ -12,10 +12,10 @@ Router _$UserControllerRouter(UserController service) => Router()
   ..add('GET', '/', (Request request) async {
     final data = await service.listUsers(
       request,
-      query: $parseQueryParametersAll(
+      query: $parseQueryParameters(
         request,
         'query',
-        (data) => data != null && data.isNotEmpty ? data.single : null,
+        (data) => data.isNotEmpty ? data.single : null,
       ),
     );
     return JsonResponse.ok(data);

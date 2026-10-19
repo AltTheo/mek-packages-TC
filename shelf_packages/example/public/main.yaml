@@ -129,6 +129,53 @@ paths:
                 type: string
                 format: binary
   /api-v1/collections:
+    get:
+      tags:
+        - CollectionsController
+      summary: fetchCollections
+      operationId: fetchCollections
+      parameters:
+        - name: languages
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+            uniqueItems: true
+        - name: conditions
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/ChatType"
+            uniqueItems: true
+        - name: languagesNullable
+          in: query
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+            uniqueItems: true
+        - name: conditionsNullable
+          in: query
+          required: true
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/ChatType"
+            uniqueItems: true
+      responses:
+        200:
+          description: "Operation completed!"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CollectionDto"
     put:
       tags:
         - CollectionsController
@@ -145,53 +192,6 @@ paths:
       responses:
         200:
           description: "Operation completed!"
-    post:
-      tags:
-        - CollectionsController
-      summary: fetchCollections
-      operationId: fetchCollections
-      parameters:
-        - name: languages
-          in: query
-          required: true
-          schema:
-            type: array
-            items:
-              type: string
-            uniqueItems: true
-        - name: conditions
-          in: query
-          required: true
-          schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/ChatType"
-            uniqueItems: true
-        - name: languagesNullable
-          in: query
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-            uniqueItems: true
-        - name: conditionsNullable
-          in: query
-          required: false
-          schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/ChatType"
-            uniqueItems: true
-      responses:
-        200:
-          description: "Operation completed!"
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/CollectionDto"
 components:
   schemas:
     ChatVisibility:

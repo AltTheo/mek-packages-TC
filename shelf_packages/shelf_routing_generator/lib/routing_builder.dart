@@ -57,14 +57,20 @@ class RoutingGenerator extends Generator {
 
   String _codeListParser(FormalParameterElement element, DartType type) {
     if (TypeCheckers.iterable.isAssignableFromType(type)) {
+      if (type.isNullableType) {
+        throw InvalidGenerationSourceError(
+          'Any Iterable (List/Set/IList/ISet) cannot be nullable.',
+          todo: 'Provide a default value or remove the nullability.',
+          element: element,
+        );
+      }
+
       if (type.isDartCoreList || type.isDartCoreSet) {
         var parserCode = _codeParser(element, (type as InterfaceType).typeArguments.single);
         if (parserCode != null) {
           parserCode = '.map($parserCode).${type.isDartCoreSet ? 'toSet' : 'toList'}()';
         }
-        return type.isNullableType
-            ? '(data) => data?${parserCode ?? ''}'
-            : '(data) => data!${parserCode ?? ''}';
+        return '(data) => data${parserCode ?? ''}';
       }
 
       if (type case final InterfaceType type) {
@@ -74,25 +80,26 @@ class RoutingGenerator extends Generator {
         final typeParameter = type.typeArguments.singleOrNull;
         if (fromJsonConstructor != null && typeParameter != null) {
           final parsingCode = _codeParser(element, typeParameter);
-          final fromJsonCode =
-              '${type.element.name}.fromJson('
-              'data, '
+          return '(data) => ${type.element.name}.fromJson(data, '
               '(data) => ${parsingCode != null ? '$parsingCode(data as String)' : 'data as String'}'
               ')';
-          return type.isNullableType
-              ? '(data) => data != null ? $fromJsonCode : null'
-              : '(data) => $fromJsonCode';
         }
       }
+
+      throw InvalidGenerationSourceError(
+        'The iterable type is not supported.',
+        todo: 'Use List/Set or IList/ISet.',
+        element: element,
+      );
     }
 
     final parsingCode = _codeParser(element, type);
     if (type.isNullableType) {
-      return '(data) => data != null && data.isNotEmpty '
+      return '(data) => data.isNotEmpty '
           '? ${parsingCode != null ? '$parsingCode(data.single)' : 'data.single'} '
           ': null';
     } else {
-      return '(data) => ${parsingCode != null ? '$parsingCode(data!.single)' : 'data!.single'}';
+      return '(data) => ${parsingCode != null ? '$parsingCode(data.single)' : 'data.single'}';
     }
   }
 
@@ -187,7 +194,13 @@ class RoutingGenerator extends Generator {
       if (queryParameters.isNotEmpty)
         ...queryParameters.map((e) {
           final key = e.displayName;
-          return '${e.displayName}: \$parseQueryParametersAll(request, ${literalString(key)}, ${_codeListParser(e, e.type)})';
+          final args = <String>[
+            'request',
+            escapeDartString(key),
+            _codeListParser(e, e.type),
+            if (e.defaultValueCode case final code?) 'defaultValue: $code',
+          ];
+          return '${e.displayName}: \$parseQueryParameters(${args.join(', ')})';
         }),
     ];
     final methodParamsText = methodParams.expand((e) sync* {

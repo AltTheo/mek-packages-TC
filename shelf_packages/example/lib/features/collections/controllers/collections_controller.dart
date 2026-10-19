@@ -13,13 +13,13 @@ class CollectionsController with RouterMixin {
   @override
   Router get router => _$CollectionsControllerRouter(this);
 
-  @Route.post('/')
+  @Route.get('/')
   Future<IList<CollectionDto>> fetchCollections(
     Request request, {
     ISet<String> languages = const ISet.empty(),
     ISet<ChatType> conditions = const ISet.empty(),
-    ISet<String>? languagesNullable,
-    ISet<ChatType>? conditionsNullable,
+    required ISet<String> languagesNullable,
+    required ISet<ChatType> conditionsNullable,
   }) async {
     // ...
 

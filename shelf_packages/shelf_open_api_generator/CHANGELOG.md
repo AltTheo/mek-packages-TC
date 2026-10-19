@@ -1,4 +1,7 @@
 
+## 3.6.1
+- fix: do not force required query parameter if it has default value
+
 ## 3.6.0
 - feat: added support to `fast_immutable_collections` and `built_collections`
 

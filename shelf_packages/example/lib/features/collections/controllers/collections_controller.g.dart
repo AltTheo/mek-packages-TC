@@ -9,32 +9,32 @@ part of 'collections_controller.dart';
 // **************************************************************************
 
 Router _$CollectionsControllerRouter(CollectionsController service) => Router()
-  ..add('POST', '/', (Request request) async {
+  ..add('GET', '/', (Request request) async {
     final data = await service.fetchCollections(
       request,
-      languages: $parseQueryParametersAll(
+      languages: $parseQueryParameters(
         request,
         'languages',
         (data) => ISet.fromJson(data, (data) => data as String),
+        defaultValue: const ISet.empty(),
       ),
-      conditions: $parseQueryParametersAll(
+      conditions: $parseQueryParameters(
         request,
         'conditions',
         (data) =>
             ISet.fromJson(data, (data) => ChatType.fromJson(data as String)),
+        defaultValue: const ISet.empty(),
       ),
-      languagesNullable: $parseQueryParametersAll(
+      languagesNullable: $parseQueryParameters(
         request,
         'languagesNullable',
-        (data) =>
-            data != null ? ISet.fromJson(data, (data) => data as String) : null,
+        (data) => ISet.fromJson(data, (data) => data as String),
       ),
-      conditionsNullable: $parseQueryParametersAll(
+      conditionsNullable: $parseQueryParameters(
         request,
         'conditionsNullable',
-        (data) => data != null
-            ? ISet.fromJson(data, (data) => ChatType.fromJson(data as String))
-            : null,
+        (data) =>
+            ISet.fromJson(data, (data) => ChatType.fromJson(data as String)),
       ),
     );
     return JsonResponse.ok(data.toJson((data) => data.toJson()));
