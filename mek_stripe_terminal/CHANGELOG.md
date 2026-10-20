@@ -1,5 +1,8 @@
 
 ## 5.7.3+tc1
+- fix(ios): Now `PigeonError` is caught and passed through unchanged before falling back to the generic `NSError` path.
+
+## 5.7.3+tc1
 - fix(ios): `TerminalExceptionApi.toPlatformError()` double-prefixed the pigeon error code (`mek_stripe_terminalmek_stripe_terminal`), which meant the Dart-side host-exception check never matched and `TerminalException` was never thrown on iOS. See [BreX900/mek-packages#167](https://github.com/BreX900/mek-packages/issues/167).
 
 ## 5.7.3
