@@ -34,17 +34,30 @@ class ProximityReaderPlugin : ProximityReaderPlatformApi {
     
     func presentHowToTap(completion: @escaping (Result<Void, any Error>) -> Void) {
         handleResult(completion) {
-            guard let viewController = self._viewController else {
+            guard let viewController = await self._viewController ?? Self.currentViewController() else {
                 throw createPigeonError(".state_error", "UIViewController is nil");
             }
-            
+
             guard #available(iOS 18.0, *) else {
                 throw createUnsupportedOperatingSystem("18.0");
             }
-            
+
             let discovery = ProximityReaderDiscovery()
             let content = try await discovery.content(for: .payment(.howToTap))
             try await discovery.presentContent(content, from: viewController)
         }
+    }
+
+    @MainActor
+    private static func currentViewController() -> UIViewController? {
+        let windowScene = UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .first
+        let window = windowScene?.windows.first(where: { $0.isKeyWindow }) ?? windowScene?.windows.first
+        var viewController = window?.rootViewController
+        while let presented = viewController?.presentedViewController {
+            viewController = presented
+        }
+        return viewController
     }
 }
