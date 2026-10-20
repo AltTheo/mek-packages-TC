@@ -13,7 +13,7 @@ func createApiException(_ code: TerminalExceptionCodeApi, _ message: String? = n
 
 extension TerminalExceptionApi {
     func toPlatformError() -> PigeonError {
-        return createPigeonError("mek_stripe_terminal", nil, toList())
+        return createPigeonError(nil, nil, toList())
     }
 }
 
