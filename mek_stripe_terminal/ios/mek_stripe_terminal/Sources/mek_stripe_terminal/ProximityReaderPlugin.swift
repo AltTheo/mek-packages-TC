@@ -34,7 +34,10 @@ class ProximityReaderPlugin : ProximityReaderPlatformApi {
     
     func presentHowToTap(completion: @escaping (Result<Void, any Error>) -> Void) {
         handleResult(completion) {
-            let resolvedViewController = self._viewController ?? (await Self.currentViewController())
+            var resolvedViewController = self._viewController
+            if resolvedViewController == nil {
+                resolvedViewController = await Self.currentViewController()
+            }
             guard let viewController = resolvedViewController else {
                 throw createPigeonError(".state_error", "UIViewController is nil");
             }
