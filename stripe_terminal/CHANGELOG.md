@@ -1,5 +1,9 @@
 
 
+## 4.6.3+tc1
+- build(ios): bumped native `StripeTerminal` dependency from `~> 4.6.0` to `~> 4.7.3` (the last 4.x release on iOS before the SDK moved to 5.x). No breaking changes in this range affect this wrapper (the one breaking rename, `ConfirmConfiguration.amountSurcharge` -> `surcharge.amount`, landed in 4.6.0 itself and isn't used here).
+- build(android): bumped native `com.stripe:stripeterminal-core`/`stripeterminal-taptopay` from `4.6.0` to `4.7.6`. No breaking changes in this range. Notably includes Interac payment method support for Tap to Pay on Android, added in native 4.7.3 (2025-09-25).
+
 ## 4.6.3
 - fix: deleted a trailing comma that was causing a compilation error on  Xcode versions priors to 16.3
 

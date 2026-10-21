@@ -1,2 +1,6 @@
 .idea
 .DS_Store
+
+# Leftover from the mek_stripe_terminal (5.x) package layout; this branch
+# uses the pre-rename stripe_terminal/ folder instead.
+/mek_stripe_terminal/
