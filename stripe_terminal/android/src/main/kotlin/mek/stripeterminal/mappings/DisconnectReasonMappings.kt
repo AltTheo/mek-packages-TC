@@ -14,5 +14,7 @@ fun DisconnectReason.toApi(): DisconnectReasonApi {
         DisconnectReason.BLUETOOTH_DISABLED -> DisconnectReasonApi.BLUETOOTH_DISABLED
         DisconnectReason.USB_DISCONNECTED -> DisconnectReasonApi.USB_DISCONNECTED
         DisconnectReason.IDLE_POWER_DOWN -> DisconnectReasonApi.IDLE_POWER_DOWN
+        // Added in native SDK 4.7.0; no Dart-side equivalent yet.
+        DisconnectReason.BLUETOOTH_PEER_REMOVED_PAIRING_INFORMATION -> DisconnectReasonApi.UNKNOWN
     }
 }

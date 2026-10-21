@@ -89,6 +89,11 @@ fun DeviceType.toApi(): DeviceTypeApi? {
         DeviceType.VERIFONE_UX700 -> DeviceTypeApi.VERIFONE_UX700
         DeviceType.VERIFONE_V660P_DEVKIT -> DeviceTypeApi.VERIFONE_V660P_DEVKIT
         DeviceType.VERIFONE_UX700_DEVKIT -> DeviceTypeApi.VERIFONE_UX700_DEVKIT
+        // Added in native SDK 4.7.3; no Dart-side equivalent yet.
+        DeviceType.STRIPE_T600 -> null
+        DeviceType.STRIPE_T600_DEVKIT -> null
+        DeviceType.STRIPE_T610 -> null
+        DeviceType.STRIPE_T610_DEVKIT -> null
         DeviceType.UNKNOWN -> null
     }
 }

@@ -3,6 +3,7 @@
 ## 4.6.3+tc1
 - build(ios): bumped native `StripeTerminal` dependency from `~> 4.6.0` to `~> 4.7.3` (the last 4.x release on iOS before the SDK moved to 5.x). No breaking changes in this range affect this wrapper (the one breaking rename, `ConfirmConfiguration.amountSurcharge` -> `surcharge.amount`, landed in 4.6.0 itself and isn't used here).
 - build(android): bumped native `com.stripe:stripeterminal-core`/`stripeterminal-taptopay` from `4.6.0` to `4.7.6`. No breaking changes in this range. Notably includes Interac payment method support for Tap to Pay on Android, added in native 4.7.3 (2025-09-25).
+- fix(android): the native SDK bump added new enum cases that broke exhaustive `when` compilation: `DisconnectReason.BLUETOOTH_PEER_REMOVED_PAIRING_INFORMATION` (4.7.0), `TerminalErrorCode.INVALID_MOTO_CONFIGURATION`, and `DeviceType.STRIPE_T600`/`STRIPE_T600_DEVKIT`/`STRIPE_T610`/`STRIPE_T610_DEVKIT` (4.7.3). Mapped to the existing `UNKNOWN`/`null` fallbacks used for other unmapped cases, matching this wrapper's existing convention.
 
 ## 4.6.3
 - fix: deleted a trailing comma that was causing a compilation error on  Xcode versions priors to 16.3

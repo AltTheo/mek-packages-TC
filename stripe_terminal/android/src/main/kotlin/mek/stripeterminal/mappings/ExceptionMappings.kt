@@ -39,6 +39,8 @@ private fun TerminalErrorCode.toApiCode(): TerminalExceptionCodeApi? {
         TerminalErrorCode.UNSUPPORTED_SDK -> TerminalExceptionCodeApi.UNSUPPORTED_SDK
         TerminalErrorCode.USB_PERMISSION_DENIED -> TerminalExceptionCodeApi.USB_PERMISSION_DENIED
         TerminalErrorCode.MISSING_PREREQUISITE -> null
+        // Added in native SDK 4.7.x; no Dart-side equivalent yet.
+        TerminalErrorCode.INVALID_MOTO_CONFIGURATION -> null
         TerminalErrorCode.MISSING_REQUIRED_PARAMETER -> TerminalExceptionCodeApi.INVALID_PARAMETER
         TerminalErrorCode.INVALID_REQUIRED_PARAMETER -> TerminalExceptionCodeApi.INVALID_REQUIRED_PARAMETER
         TerminalErrorCode.INVALID_TIP_PARAMETER -> TerminalExceptionCodeApi.INVALID_TIP_PARAMETER
