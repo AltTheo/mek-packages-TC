@@ -1,8 +1,7 @@
 
-## 5.7.3+tc1
-- fix(ios): Now `PigeonError` is caught and passed through unchanged before falling back to the generic `NSError` path.
-
-## 5.7.3+tc1
+## 5.7.4
+- fix(ios): `ProximityReaderPlugin.presentHowToTap` failed with `"UIViewController is nil"` whenever the Flutter plugin registrar's `viewController` was unavailable at registration time. It now falls back to resolving the current key window's (topmost presented) root view controller at call time instead of only relying on the one captured once at init.
+- fix(ios): `handleResult`/`handleError` in `Utils.swift` only caught `NSError`, so any `PigeonError` thrown directly (eg. `createPigeonError`/`createUnsupportedOperatingSystem`, used by `ProximityReaderPlugin.presentHowToTap` and friends) got implicitly bridged to a generic `NSError` (domain `mek_stripe_terminal.PigeonError`, code `1`), losing the real code/message/details and surfacing as an opaque `PlatformException(mek_stripe_terminal.PigeonError:1, The operation couldn't be completed...)`. Now `PigeonError` is caught and passed through unchanged before falling back to the generic `NSError` path.
 - fix(ios): `TerminalExceptionApi.toPlatformError()` double-prefixed the pigeon error code (`mek_stripe_terminalmek_stripe_terminal`), which meant the Dart-side host-exception check never matched and `TerminalException` was never thrown on iOS. See [BreX900/mek-packages#167](https://github.com/BreX900/mek-packages/issues/167).
 
 ## 5.7.3
